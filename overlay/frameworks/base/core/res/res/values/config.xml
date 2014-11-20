@@ -244,14 +244,14 @@
     <integer name="config_shutdownBatteryTemperature">600</integer>
 
     <!-- Allow changing button backlight brightness in Settings -->
-    <integer name="config_buttonBrightnessSettingDefault">140</integer>
-    <bool name="config_deviceHasVariableButtonBrightness">true</bool>
+    <!--integer name="config_buttonBrightnessSettingDefault">140</integer -->
+    <!--bool name="config_deviceHasVariableButtonBrightness">true</bool -->
 
     <!-- Software blur is too slow on this device -->
     <bool name="config_sf_slowBlur">true</bool>
 
    <!-- Device supports LED flashlight -->
-   <bool name="config_enableTorch">true</bool>
+   <!-- bool name="config_enableTorch">true</bool -->
 
    <!-- Enables or disables fading edges when marquee is enabled in TextView. -->
   <bool name="config_ui_enableFadingMarquee">false</bool>
