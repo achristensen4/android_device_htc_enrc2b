@@ -53,10 +53,13 @@ BOARD_KERNEL_PAGESIZE := 2048
 
 # Try to build the kernel
 TARGET_KERNEL_SOURCE := kernel/htc/enrc2b
-TARGET_KERNEL_CONFIG := cyanogenmod_enrc2b_defconfig
+TARGET_KERNEL_CONFIG := cm_enrc2b_defconfig
 
 # dont build docs
 DISABLE_DROIDDOC := true
+
+# Charge mode
+BOARD_CHARGING_MODE_BOOTING_LPM := /sys/htc_lpm/lpm_mode
 
 # Recovery
 TARGET_PREBUILT_RECOVERY_KERNEL := device/htc/enrc2b/recovery/recovery_kernel
@@ -66,3 +69,26 @@ TARGET_RECOVERY_FSTAB := device/htc/enrc2b/ramdisk/fstab.enrc2b
 RECOVERY_FSTAB_VERSION := 2
 
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
+
+# Device specific SELinux policies
+BOARD_SEPOLICY_DIRS += \
+		device/htc/enrc2b/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+    file_contexts \
+    property_contexts \
+    service_contexts \
+    drmserver.te \
+    file.te \
+    gpsd.te \
+    init.te \
+    init_shell.te \
+    lmkd.te \
+    mediaserver.te \
+    property.te \
+    recovery.te \
+    rild.te \
+    sensors_config.te \
+    surfaceflinger.te \
+    system_app.te \
+    system_server.te

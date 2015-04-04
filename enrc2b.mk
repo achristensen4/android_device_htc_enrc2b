@@ -18,7 +18,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 #Recovery
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/sbin/choice_fn:recovery/root/sbin/choice_fn \
     $(LOCAL_PATH)/recovery/sbin/detect_key:recovery/root/sbin/detect_key \
     $(LOCAL_PATH)/recovery/sbin/offmode_charging:recovery/root/sbin/offmode_charging \
@@ -30,7 +30,6 @@ PRODUCT_COPY_FILES := \
     $(LOCAL_PATH)/ramdisk/init.enrc2b.rc:root/init.enrc2b.rc \
     $(LOCAL_PATH)/ramdisk/init.usb.rc:root/init.usb.rc \
     $(LOCAL_PATH)/ramdisk/init.trace.rc:root/init.trace.rc \
-    $(LOCAL_PATH)/ramdisk/init.scripts.sh:root/init.scripts.sh \
     $(LOCAL_PATH)/ramdisk/ueventd.rc:root/ueventd.rc \
     $(LOCAL_PATH)/ramdisk/ueventd.enrc2b.rc:root/ueventd.enrc2b.rc \
     $(LOCAL_PATH)/ramdisk/fstab.enrc2b:root/fstab.enrc2b
@@ -62,7 +61,7 @@ PRODUCT_PACKAGES += \
     sdcard \
     libmtp
 
-# Hostapd   
+# Hostapd
 PRODUCT_PACKAGES += \
     hostapd_cli \
     calibrator
@@ -70,7 +69,7 @@ PRODUCT_PACKAGES += \
 #NFC
 PRODUCT_PACKAGES += \
     libnfc_ndef
-        
+
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.locationfeatures=1 \
     ro.setupwizard.enable_bypass=1 \
@@ -85,10 +84,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hwui.texture_cache_size=32 \
     ro.hwui.layer_cache_size=24
 
+PRODUCT_PROPERTY_OVERRIDES += \
+		debug.hwui.render_dirty_regions=false
+
 # Tegra 3 spacific overrides
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.tegra.nvmmlite=1 \
     tf.enable=y
+
+PRODUCT_PROPERTY_OVERRIDES += \
+		ro.telephony.ril.config=signalstrength,skipbrokendatacall
 
 # We have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise

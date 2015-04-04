@@ -1,0 +1,6 @@
+# should be more specific to only target /data/data/com.nvidia.cap
+allow surfaceflinger system_data_file:sock_file create_file_perms;
+allow surfaceflinger system_data_file:dir rw_dir_perms;
+
+# allow surfaceflinger to read smartdimmer status
+allow surfaceflinger sysfs_smartdimmer:file r_file_perms;
