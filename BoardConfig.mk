@@ -79,10 +79,15 @@ BOARD_SEPOLICY_UNION += \
     property_contexts \
     service_contexts \
     drmserver.te \
+	bootanim.te \
+	drmserver.te \
     file.te \
     gpsd.te \
+	hdmid.te \
+	healthd.te \
+	htcbatt.te \
     init.te \
-    init_shell.te \
+	keystore.te \
     lmkd.te \
     mediaserver.te \
     property.te \
@@ -91,4 +96,6 @@ BOARD_SEPOLICY_UNION += \
     sensors_config.te \
     surfaceflinger.te \
     system_app.te \
-    system_server.te
+    system_server.te \
+	ueventd.te \
+	zygote.te

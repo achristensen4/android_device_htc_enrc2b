@@ -4,3 +4,6 @@ allow surfaceflinger system_data_file:dir rw_dir_perms;
 
 # allow surfaceflinger to read smartdimmer status
 allow surfaceflinger sysfs_smartdimmer:file r_file_perms;
+
+allow surfaceflinger cpuctl_device:dir search;
+allow surfaceflinger ctl_default_prop:property_service set;

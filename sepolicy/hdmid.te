@@ -1,0 +1,2 @@
+allow hdmid cpuctl_device:dir search;
+allow hdmid self:capability sys_nice;
