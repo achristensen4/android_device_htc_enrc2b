@@ -3,3 +3,7 @@ allow gpsd self:capability dac_override;
 
 #Allow writing to pts
 allow gpsd devpts:chr_file rw_file_perms;
+
+allow domain system_data_file : dir { getattr search } ;
+
+allow system_server gps_data_file : fifo_file { ioctl read write getattr setattr lock append open } ;

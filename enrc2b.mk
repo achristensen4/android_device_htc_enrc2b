@@ -25,7 +25,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/sbin/offmode_charging:recovery/root/sbin/offmode_charging \
     $(LOCAL_PATH)/recovery/sbin/power_test:recovery/root/sbin/power_test \
     $(LOCAL_PATH)/recovery/init.recovery.enrc2b.rc:recovery/root/init.recovery.enrc2b.rc
-
+    
 # Files needed for boot image
 PRODUCT_COPY_FILES := \
     $(LOCAL_PATH)/ramdisk/init.enrc2b.rc:root/init.enrc2b.rc \
@@ -68,6 +68,10 @@ PRODUCT_PACKAGES += \
 #NFC
 PRODUCT_PACKAGES += \
     libnfc_ndef
+
+#Charge Led
+PRODUCT_PACKAGES += \
+	chargeled
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
