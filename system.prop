@@ -6,18 +6,6 @@ ro.opengles.version = 131072
 
 #Common display settings
 ro.sf.lcd_density=320
-ro.hwui.text_cache_width=2048
-ro.hwui.text_cache_height=256
-
-
-#Performance and battery tweaks
-ro.ril.disable.power.collapse=1
-debug.performance.tuning=1
-video.accelerate.hw=1
-debug.sf.hw=1
-persist.sys.ui.hw=true
-ro.media.dec.jpeg.memcap=8000000
-ro.media.enc.jpeg.quality=100
 
 # RIL
 rild.libpath=/system/lib/libhtc_ril.so
@@ -74,13 +62,6 @@ ro.ril.stkprof.param=FFFFFFFF7F1D00DFB703021F22000000830000000000401000000000000
 # Disable LTE
 telephony.lteOnGsmDevice=0
 ro.telephony.default_network=3
-
-#Wi-Fi
-wifi.interface=wlan0
-wifi.supplicant_scan_interval=60
-
-# For usb storage
-ro.usb_host = 1
 
 # Support HW reset dialog
 ro.product.hwreset = 1

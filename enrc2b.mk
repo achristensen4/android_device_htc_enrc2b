@@ -51,10 +51,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 $(LOCAL_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
 
-#Audio packages
-PRODUCT_PACKAGES += \
-    libinvensense_mpl
-
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     sdcard \
@@ -65,31 +61,44 @@ PRODUCT_PACKAGES += \
     hostapd_cli \
     calibrator
 
-#NFC
+# NFC packages
 PRODUCT_PACKAGES += \
-    libnfc_ndef
+    nfc.enrc2b \
+    Nfc \
+    Tag
 
-#Charge Led
+# Filesystem management tools
 PRODUCT_PACKAGES += \
-	chargeled
+    fsck.f2fs \
+    mkfs.f2fs \
+    e2fsck \
+    setup_fs
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
-#Performance tuning (http://source.android.com/devices/tuning.html)
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.hwui.disable_scissor_opt=true \
-    ro.hwui.texture_cache_size=32 \
-    ro.hwui.layer_cache_size=24
-
-PRODUCT_PROPERTY_OVERRIDES += \
-		debug.hwui.render_dirty_regions=false
-
-# Tegra 3 spacific overrides
+# Tegra 3 specific overrides
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.tegra.nvmmlite=1 \
     tf.enable=y
 
+PRODUCT_PROPERTY_OVERRIDES := \
+    wifi.interface=wlan0 \
+    wifi.supplicant_scan_interval=15 \
+    tf.enable=y \
+    persist.sys.media.legacy-drm=true \
+    drm.service.enabled=true
+
+# libhwui flags
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.hwui.render_dirty_regions=false   
+    
+# Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp
+
+# Enable USB OTG support
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.isUsbOtgEnabled=true
+
+#ril override
 PRODUCT_PROPERTY_OVERRIDES += \
 		ro.telephony.ril.config=signalstrength,skipbrokendatacall
 
