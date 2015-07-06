@@ -66,6 +66,11 @@ PRODUCT_PACKAGES += \
     nfc.enrc2b \
     Nfc \
     Tag
+    
+
+# Power
+PRODUCT_PACKAGES += \
+    power.tegra 
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
