@@ -69,36 +69,25 @@ TARGET_RECOVERY_FSTAB := device/htc/enrc2b/ramdisk/fstab.enrc2b
 RECOVERY_FSTAB_VERSION := 2
 
 # TWRP
-TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
-DEVICE_RESOLUTION := 720x1280
-RECOVERY_SDCARD_ON_DATA := true
-BOARD_HAS_NO_REAL_SDCARD := true
-TW_NO_USB_STORAGE := true
-TW_NO_REBOOT_BOOTLOADER := true
-TW_NO_REBOOT_RECOVERY := true
-TW_INCLUDE_LP_CRYPTO := true
-TW_INTERNAL_STORAGE_PATH := "/data/media"
-TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
-TW_CRYPTO_FS_TYPE := "f2fs"
-TW_CRYPTO_REAL_BLKDEV := "/dev/block/mmcblk0p8"
-TW_CRYPTO_MNT_POINT := "/data"
-TW_CRYPTO_FS_OPTIONS := "data=ordered,delalloc"
-TW_CRYPTO_FS_FLAGS := "0x00000406"
-TW_CRYPTO_KEY_LOC := "footer"
+#TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+#DEVICE_RESOLUTION := 720x1280
+#RECOVERY_SDCARD_ON_DATA := true
+#BOARD_HAS_NO_REAL_SDCARD := true
+#TW_NO_USB_STORAGE := true
+#TW_NO_REBOOT_BOOTLOADER := true
+#TW_NO_REBOOT_RECOVERY := true
+#TW_INCLUDE_LP_CRYPTO := true
+#TW_INTERNAL_STORAGE_PATH := "/data/media"
+#TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
+#TW_CRYPTO_FS_TYPE := "ext4"
+#TW_CRYPTO_REAL_BLKDEV := "/dev/block/mmcblk0p8"
+#TW_CRYPTO_MNT_POINT := "/data"
+#TW_CRYPTO_FS_OPTIONS := "data=ordered,delalloc"
+#TW_CRYPTO_FS_FLAGS := "0x00000406"
+#TW_CRYPTO_KEY_LOC := "footer"
 
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 
-#Dexopt, the X+ has more than enough space for this
-ifneq ($(TARGET_TRANSPARENT_COMPRESSION_METHOD),)
-ifeq ($(HOST_OS),linux)
-  ifeq ($(TARGET_BUILD_VARIANT),userdebug)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-    endif
- endif
-endif
-endif
-			
 # Device specific SELinux policies
 BOARD_SEPOLICY_DIRS += \
 		device/htc/enrc2b/sepolicy
