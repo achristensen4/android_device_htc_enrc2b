@@ -38,8 +38,8 @@ on fs
     chmod 0660 /rca/calib.nvm
     chmod 0660 /rca
     chmod 0660 /rfs
-    setprop ro.crypto.fuse_sdcard true
-    setprop ro.crypto.umount_sd false
+    setprop ro.crypto.fuse_sdcard false
+    setprop ro.crypto.umount_sd true
     
 on post-fs-data
     # We will remap this as /storage/sdcard0 with the sdcard fuse tool
@@ -84,7 +84,7 @@ on boot
     chmod 0660 /sys/class/power_supply/battery/phone_call
 
 # Kernel Tweaking
-    write /proc/sys/kernel/panic_on_oops 0
+    write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
     write /proc/sys/kernel/sched_latency_ns 10000000
@@ -92,8 +92,8 @@ on boot
     write /proc/sys/kernel/sched_compat_yield 1
     write /proc/sys/kernel/sched_child_runs_first 0
     write /proc/sys/kernel/randomize_va_space 2
-    write /proc/sys/kernel/kptr_restrict 2
-    write /proc/sys/kernel/dmesg_restrict 1
+    write /proc/sys/kernel/kptr_restrict 0
+    write /proc/sys/kernel/dmesg_restrict 0
     write /proc/sys/vm/mmap_min_addr 32768
     write /proc/sys/net/ipv4/ping_group_range "0 2147483647"
     write /proc/sys/kernel/sched_rt_runtime_us 950000
@@ -106,13 +106,13 @@ on boot
     write /proc/sys/vm/min_free_order_shift 4
     write /proc/sys/vm/dirty_ratio 55
     write /proc/sys/vm/dirty_writeback_centisecs 2000
-    write /proc/sys/vm/drop_caches 2
+    write /proc/sys/vm/drop_caches 3
     write /proc/sys/vm/min_free_kbytes 5120
     write /proc/sys/vm/min_free_order_shift 3
     write /proc/sys/vm/oom_kill_allocating_task 1
-    write /proc/sys/vm/page-cluster 3
-    write /proc/sys/vm/panic_on_oom 0
-    write /proc/sys/vm/swappiness 40
+    write /proc/sys/vm/page-cluster 0
+    write /proc/sys/vm/panic_on_oom 1
+    write /proc/sys/vm/swappiness 100
     write /proc/sys/vm/vfs_cache_pressure 70
     chown root system /sys/module/lowmemorykiller/parameters/adj
     chmod 0664 /sys/module/lowmemorykiller/parameters/adj
@@ -148,17 +148,17 @@ on boot
     chmod 0666 /proc/net/xt_qtaguid/ctrl
 
 # Wifi: Disable the IPv6 of p2p0 interface
-    write /proc/sys/net/ipv6/conf/p2p0/disable_ipv6 1
+    write /proc/sys/net/ipv6/conf/p2p0/disable_ipv6 0
     
     chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
 
 # Load modules while booting 
     insmod /system/lib/modules/bcmdhd.ko
-    #insmod /lib/modules/baseband-xmm-power2.ko
-    #insmod /lib/modules/baseband_usb_chr.ko
-    #insmod /lib/modules/cdc-acm.ko
-    #insmod /lib/modules/raw_ip_net.ko
+    insmod /lib/modules/baseband-xmm-power2.ko
+    insmod /lib/modules/baseband_usb_chr.ko
+    insmod /lib/modules/cdc-acm.ko
+    insmod /lib/modules/raw_ip_net.ko
 
 # bluetooth
     chown bluetooth net_bt_stack /dev/ttyHS2
@@ -257,7 +257,7 @@ on boot
     write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
     write /sys/kernel/debug/tegra_hotplug/max_cpus 4
     write /sys/module/cpu_tegra3/parameters/no_lp 0
-    #write /sys/module/tegra3_emc/parameters/emc_enable 0
+    write /sys/module/tegra3_emc/parameters/emc_enable 0
     write /sys/module/cpuidle/parameters/lp2_in_idle 1
     
     chown system /sys/htc/power_save
@@ -268,12 +268,12 @@ on boot
     
     # Increase read ahead size of mmc block devices from default(128) to 1MB
     # Reduces power comsuption during video playback from sdcards
-    write /sys/block/mmcblk0/queue/read_ahead_kb 1024
-    write /sys/block/mmcblk0/bdi/read_ahead_kb 1024
+    write /sys/block/mmcblk0/queue/read_ahead_kb 0
+    write /sys/block/mmcblk0/bdi/read_ahead_kb 0
     
     # Flash storage isn't a good entropy source, and only causes locking    
     # overhead in the kernel. Turn it off
-    write /sys/block/mmcblk0/queue/add_random 0
+    write /sys/block/mmcblk0/queue/add_random 1
 
     # Discretix DRM change start
     mkdir /data/DxDrm
@@ -294,7 +294,6 @@ service pollyd /system/bin/pollyd
     
 # bugreport is triggered by the VOLUME-DOWN and VOLUME-UP keys/
 service bugreport /system/bin/dumpstate -d -v -o /sdcard/bugreports/bugreport
-    disabled
     oneshot
     keycodes 115 114
 
@@ -325,74 +324,63 @@ service poweron_modem /system/bin/poweron_modem_fls.sh /data/modem_work/
     user root
     group root
     oneshot
-    disabled
 
 service htcbatt /system/bin/htcbatt
      class core
      oneshot
 
-service wpa_supplicant /system/bin/wpa_supplicant \
+service wpa_supplicant /system/bin/wpa_supplicant
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -e/data/misc/wifi/entropy.bin
     #   we will start as root and wpa_supplicant will switch to user wifi
     #   after setting up the capabilities required for WEXT
-    #   user wifi
-    #   group wifi inet keystore
+    user wifi
+    group wifi inet keystore
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
-    disabled
     oneshot
 
-service p2p_supplicant /system/bin/wpa_supplicant \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N \
+service p2p_supplicant /system/bin/wpa_supplicant
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -N
     -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf -puse_p2p_group_interface=1
 #   we will start as root and wpa_supplicant will switch to user wifi
 #   after setting up the capabilities required for WEXT
-#   user wifi
-#   group wifi inet keystore
+    user wifi
+    group wifi inet keystore
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
-    disabled
     oneshot
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -aABKL
     class main
-    disabled
     oneshot
 
 service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     class main
-    disabled
     oneshot
 
 service dhcpcd_bnep0 /system/bin/dhcpcd -ABKL
     class main
-    disabled
     oneshot
 
 service iprenew_wlan0 /system/bin/dhcpcd -n
     class main
-    disabled
     oneshot
 
 service iprenew_p2p /system/bin/dhcpcd -n
     class main
-    disabled
     oneshot
 
 service iprenew_bnep0 /system/bin/dhcpcd -n
     class main
-    disabled
     oneshot
 
 service hostapd_bin /system/bin/logwrapper /system/bin/hostapd -dd /data/misc/wifi/hostapd.conf
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
-    disabled
     oneshot
 
 #Prepare TF service
 service tf_daemon /system/bin/tf_daemon -storageDir /data/tf -d
-    disabled
     class main
     user root
     group shell
@@ -404,23 +392,22 @@ on property:tf.enable=y
     start tf_daemon
 
 # Discretix DRM change start
-#service dx_drm_server /system/bin/DxDrmServerIpc -f -o allow_other /data/DxDrm/fuse
-#    class main
+service dx_drm_server /system/bin/DxDrmServerIpc -f -o allow_other /data/DxDrm/fuse
+class main
 
 # OMA DRM change start
-#service fusermount /system/bin/fusermount -u /data/htcfs
-#    disabled
-#    oneshot
+service fusermount /system/bin/fusermount -u /data/htcfs
+oneshot
 
-#service htcfs /system/bin/htcfs /data/htcfs -f -o allow_other
-#    class main
-#    onrestart restart fusermount
+service htcfs /system/bin/htcfs /data/htcfs -f -o allow_other
+class main
+onrestart restart fusermount
 # OMA DRM change end
 
 # create filesystems if necessary
-service setup_fs /system/bin/setup_fs \
-        /dev/block/platform/sdhci-tegra.3/by-name/UDA \
-        /dev/block/platform/sdhci-tegra.3/by-name/CAC \
+service setup_fs /system/bin/setup_fs
+        /dev/block/platform/sdhci-tegra.3/by-name/UDA
+        /dev/block/platform/sdhci-tegra.3/by-name/CAC
         /dev/block/platform/sdhci-tegra.3/by-name/MDM
     class core
     user root
@@ -429,9 +416,7 @@ service setup_fs /system/bin/setup_fs \
 
 service htc_ebdlogd /sbin/htc_ebdlogd -s -k -P 7 -n 10 -N 10
     user root
-    disabled
     oneshot
-    ioprio idle 0
 
 on property:service.htc_ebdlogd.enable=1
     start htc_ebdlogd
@@ -446,7 +431,6 @@ service cand /system/bin/cand
 service post_boot /system/bin/sh /system/etc/post_boot.sh
     class main
     user root
-    disabled
     oneshot
 
 on property:init.svc.bootanim=stopped
@@ -454,11 +438,10 @@ on property:init.svc.bootanim=stopped
 
 # virtual sdcard daemon running as media_rw (1023)
 service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
-    class late_start
+    class main
 
 service hdmid /system/bin/hdmid
     socket displayd stream 0660 root system graphics
-    disabled
 
 on property:ro.hdmi.enable=true
     start hdmid
@@ -541,13 +524,8 @@ on property:ro.hdmi.enable=true
     class_start core
     
     # maxwen - dirty hack to make sure servicemanager is started before the rest
-    exec /system/bin/sleep 2
     
     class_start main
-
-    # maxwen: is done in userinit below
-    # Run sysinit
-    #exec /system/bin/sysinit
 
 on property:selinux.reload_policy=1
     restart ueventd
@@ -557,15 +535,12 @@ on property:selinux.reload_policy=1
     oneshot
 
 service power_test /sbin/power_test
-    disabled
     oneshot
 
 service offmode_charging /sbin/offmode_charging
-    disabled
     oneshot
 
 service detect_key /sbin/detect_key
-    disabled
     oneshot
 
 service htcbatt /sbin/htcbatt
@@ -574,7 +549,6 @@ service htcbatt /sbin/htcbatt
 service console /system/bin/sh
     class core
     console
-    disabled
     user shell
     group log
 
@@ -582,7 +556,6 @@ service console /system/bin/sh
 service adbd /sbin/adbd
     class core
     socket adbd stream 660 system system
-    disabled
     seclabel u:r:adbd:s0
 
 # adbd on at boot in emulator
@@ -602,7 +575,6 @@ service servicemanager /system/bin/servicemanager
 service vold /system/bin/vold
     class core
     socket vold stream 0660 root mount
-    ioprio be 2
 
 service netd /system/bin/netd
     class main
@@ -617,8 +589,7 @@ service gsm0710mux /system/bin/gsm0710muxd -s /dev/ttyACM0 -v 5 -n 8 -m basic
     class core
     user radio
     group radio cache inet misc
-#    oneshot
-    disabled
+    oneshot
 
 service nvm-server /system/bin/nvm_server
     class core
@@ -647,14 +618,12 @@ service surfaceflinger /system/bin/surfaceflinger
 
 service sshd /system/bin/start-ssh
     class main
-    disabled
 
 service mdnsd /system/bin/mdnsd
     class main
     user mdnsr
     group inet net_raw
     socket mdnsd stream 0660 mdnsr inet
-    disabled
     oneshot
    
 service mtpd /system/bin/mtpd
@@ -662,13 +631,12 @@ service mtpd /system/bin/mtpd
     socket mtpd stream 600 system system
     user vpn
     group vpn net_admin inet net_raw
-    disabled
     oneshot
 
 # Execute files in /etc/init.d before booting
 service userinit /system/xbin/busybox run-parts /system/etc/init.d
     oneshot
-    class late_start
+    class main
     user root
     group root
 
