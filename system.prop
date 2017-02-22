@@ -99,5 +99,5 @@ ro.hdmi.enable=true
 # temporary fix for HDMI output, for videos it works now in correct landscape with this set
 persist.demo.hdmirotation=portrait
 
-#fw.power_user_switcher=true
+fw.power_user_switcher=true
 service.htc_ebdlogd.enable=1
